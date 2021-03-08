@@ -34,8 +34,6 @@
 
 class QJsonModel;
 
-class QJsonItem;
-
 class QJsonTreeItem {
 public:
     QJsonTreeItem(QJsonTreeItem *parent = nullptr);

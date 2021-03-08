@@ -21,10 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 #include "QJsonModel.h"
 #include <QFile>
-#include <QDebug>
 #include <QFont>
 
 

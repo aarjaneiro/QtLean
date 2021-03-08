@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.19)
 project(qtlean)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
@@ -18,6 +18,7 @@ if (NOT CMAKE_PREFIX_PATH)
 endif ()
 find_package(Qt${QT_VERSION} COMPONENTS ${REQUIRED_LIBS} REQUIRED)
 target_link_libraries(${PROJECT_NAME} ${REQUIRED_LIBS_QUALIFIED})
+target_link_libraries(${PROJECT_NAME} stdc++fs)
 file(COPY ${CMAKE_SOURCE_DIR}/config DESTINATION ${CMAKE_BINARY_DIR})
 add_custom_target(copy_config_files ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory

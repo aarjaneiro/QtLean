@@ -37,18 +37,21 @@ TreeEditor::TreeEditor(const QString &jsonName, QWidget *parent) : QWidget(paren
     auto *view = new QTreeView;
     view->setModel(model);
 
-    submitButton = new QPushButton(tr("Submit"));
+    submitButton = new QPushButton(tr("Save"));
     submitButton->setDefault(true);
-    revertButton = new QPushButton(tr("&Revert"));
+    revertButton = new QPushButton(tr("&Revert Changes"));
+    defaultButton = new QPushButton(tr("Default"));
     quitButton = new QPushButton(tr("Quit"));
 
     buttonBox = new QDialogButtonBox(Qt::Vertical);
     buttonBox->addButton(submitButton, QDialogButtonBox::ActionRole);
     buttonBox->addButton(revertButton, QDialogButtonBox::ActionRole);
+    buttonBox->addButton(defaultButton, QDialogButtonBox::ActionRole);
     buttonBox->addButton(quitButton, QDialogButtonBox::RejectRole);
 
     connect(submitButton, &QPushButton::clicked, this, &TreeEditor::submit);
     connect(revertButton, &QPushButton::clicked, this, &TreeEditor::revert);
+    connect(defaultButton, &QPushButton::clicked, this, &TreeEditor::to_default);
     connect(quitButton, &QPushButton::clicked, this, &TreeEditor::close);
 
     auto *mainLayout = new QHBoxLayout;
@@ -68,6 +71,15 @@ void TreeEditor::submit() {
 
 void TreeEditor::revert() {
     model->load("config/config.json");
+    model->setHeaderData(0, Qt::Vertical, tr("Key"));
+    model->setHeaderData(1, Qt::Vertical, tr("Value"));
+
+    auto *view = new QTreeView;
+    view->setModel(model);
+}
+
+void TreeEditor::to_default() {
+    model->load("config/default_config.json");
     model->setHeaderData(0, Qt::Vertical, tr("Key"));
     model->setHeaderData(1, Qt::Vertical, tr("Value"));
 

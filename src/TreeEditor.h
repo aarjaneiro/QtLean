@@ -48,10 +48,13 @@ private slots:
 
     void revert();
 
+    void to_default();
+
 
 private:
     QPushButton *submitButton;
     QPushButton *revertButton;
+    QPushButton *defaultButton;
     QPushButton *quitButton;
     QDialogButtonBox *buttonBox;
     QJsonModel *model;
