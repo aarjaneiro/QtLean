@@ -29,7 +29,6 @@
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
-    QWidget ui;
     QString cwd = "config/config.json";
     std::cout << cwd.toStdString();
     TreeEditor editor(cwd);
