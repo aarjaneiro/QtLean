@@ -1,6 +1,12 @@
 # QtLean
 A Qt interface and build system for QuantConnect's Lean (WIP).
 
+Pictures
+--------
+- Configuration editor
+   ![config](images/img.png)
+ 
+
 Current Features
 -----------------
 1. JSON TreeView editor.
