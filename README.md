@@ -24,13 +24,13 @@ Current Features
 TODO
 ----
 
-1. Add interfacing with mono.
-2. Add automatic Python configuration.
+1. Add interfacing with mono via embedding.
+2. Add fully automatic Python configuration via cmake.
 3. Add charting.
 
 Building
 --------
-While currently only a .json editor, the project can be built by running:
+The project can be built by running:
 
 **NOTE: this should be run within a Python3.6 environment!**
 ```shell
