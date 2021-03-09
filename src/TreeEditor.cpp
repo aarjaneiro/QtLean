@@ -56,13 +56,13 @@ TreeEditor::TreeEditor(const QString &jsonName, QWidget *parent) : QWidget(paren
 
 void TreeEditor::submit() {
     auto json_doc = model->json().toJson();
-    QFile save("config/config.json");
+    QFile save("assets/config/config.json");
     save.open(QIODevice::ReadWrite | QIODevice::Text);
     save.write(json_doc);
 }
 
 void TreeEditor::revert() {
-    model->load("config/config.json");
+    model->load("assets/config/config.json");
     model->setHeaderData(0, Qt::Vertical, tr("Key"));
     model->setHeaderData(1, Qt::Vertical, tr("Value"));
 
@@ -71,7 +71,7 @@ void TreeEditor::revert() {
 }
 
 void TreeEditor::to_default() {
-    model->load("config/default_config.json");
+    model->load("assets/config/default_config.json");
     model->setHeaderData(0, Qt::Vertical, tr("Key"));
     model->setHeaderData(1, Qt::Vertical, tr("Value"));
 

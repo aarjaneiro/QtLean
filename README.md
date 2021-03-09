@@ -1,4 +1,4 @@
-![logo](src/logo.png)
+![logo](src/assets/logo.png)
 
 # QtLean
 
@@ -32,6 +32,7 @@ Building
 --------
 While currently only a .json editor, the project can be built by running:
 
+**NOTE: this should be run within a Python3.6 environment!**
 ```shell
 mkdir build && cd build
 ../configure
@@ -39,10 +40,12 @@ cmake ..
 make
 
 ```
+_If you cannot create an environment with Python 3.6, run the `py_config.sh` script in your build directory (see `py_config.sh --help` for more info)_
+
 
 If you run into issues, note that one can execute `make {OPTION}` for any of the following options:
 
-```
+````
 ... all (the default if no target is provided)
 ... clean
 ... depend
@@ -63,4 +66,4 @@ If you run into issues, note that one can execute `make {OPTION}` for any of the
 ... src/main.o
 ... src/main.i
 ... src/main.s
-```
+````

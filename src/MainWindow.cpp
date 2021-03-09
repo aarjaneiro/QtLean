@@ -14,24 +14,30 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#include <QtWidgets>
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "readability-convert-member-functions-to-static"
+
 #include "MainWindow.h"
+#include "TreeEditor.h"
 #include <QDialogButtonBox>
 #include <QSessionManager>
+#include <QtWidgets>
+#include <fstream>
 #include <iostream>
-#include "TreeEditor.h"
-
 
 MainWindow::MainWindow() {
-    QString cwd = "config/config.json";
+    QString cwd = "assets/config/config.json";
+    std::cout << "\nConfiguration loaded at: ";
     std::cout << cwd.toStdString();
+
+    // Initialize widgets
     logo = new QLabel;
     editor = new TreeEditor(cwd);
     mainWidget = new QWidget;
     auto *mainLayout = new QVBoxLayout;
-    runButton = new QPushButton(tr("Run Algorithm"));
-    confButton = new QPushButton(tr("Configure"));
-    quitButton = new QPushButton(tr("Quit"));
+    runButton = new QPushButton(tr("&Run Algorithm"));
+    confButton = new QPushButton(tr("&Configure"));
+    quitButton = new QPushButton(tr("&Quit"));
 
     dialog = new QDialogButtonBox(Qt::Horizontal);
     dialog->addButton(runButton, QDialogButtonBox::ActionRole);
@@ -41,13 +47,15 @@ MainWindow::MainWindow() {
     connect(confButton, &QPushButton::clicked, this, &MainWindow::configure);
     connect(quitButton, &QPushButton::clicked, this, &MainWindow::close);
 
-    QPixmap pix("images/logo.png");
+    QPixmap pix("assets/logo.png");
     logo->setPixmap(pix);
 
     auto *description = new QLabel(
-            "Aaron Janeiro Stone (2021) \n \n Usage: Configure your settings and click `Run Algorithm` to launch.");
+            "Aaron Janeiro Stone (2021) \n \n "
+            "Usage: Configure your settings and click `Run Algorithm` to launch.");
     description->setAlignment(Qt::AlignCenter);
 
+    // Set widgets in main window
     mainLayout->addWidget(logo);
     mainLayout->addWidget(description);
     mainLayout->addWidget(dialog);
@@ -60,11 +68,22 @@ MainWindow::MainWindow() {
     setWindowTitle(tr("QtLean"));
 }
 
+
+#define MONOSHELL "\
+#/bin/bash \n\
+xterm -e \" cd $PWD/lean_bin\;mono ./QuantConnect.Lean.Launcher.exe \" \n\
+clear\
+"
+
 void MainWindow::runAlgorithm() {
-
+    // Move config
+    std::ifstream source("assets/config/config.json", std::ios::binary);
+    std::ofstream destination("lean_bin/config.json", std::ios::binary);
+    destination << source.rdbuf();
+    std::cout << "\nSuccessfully copied config.";
+    system(MONOSHELL);
 }
 
-void MainWindow::configure() {
-    editor->show();
-}
+void MainWindow::configure() { editor->show(); }
 
+#pragma clang diagnostic pop
