@@ -22,14 +22,45 @@
  * SOFTWARE.
  */
 
-#include <QApplication>
-#include "MainWindow.h"
+#ifndef QTLEAN_MAINWINDOW_H
+#define QTLEAN_MAINWINDOW_H
 
-int main(int argc, char *argv[])
-{
-    QApplication app(argc, argv);
-    MainWindow window;
-    window.show();
-    return QApplication::exec();
-}
+#include "QJsonModel.h"
+#include <QMainWindow>
+#include <QtWidgets>
+#include <QSessionManager>
+#include "TreeEditor.h"
 
+
+QT_BEGIN_NAMESPACE
+class QDialogButtonBox;
+
+class QPushButton;
+
+QT_END_NAMESPACE
+
+class MainWindow : public QMainWindow {
+Q_OBJECT
+
+
+public:
+    MainWindow();
+
+private slots:
+
+    void runAlgorithm();
+
+    void configure();
+
+private:
+    QLabel *logo;
+    TreeEditor *editor;
+    QWidget *mainWidget;
+    QPushButton *runButton;
+    QPushButton *confButton;
+    QPushButton *quitButton;
+    QDialogButtonBox *dialog;
+};
+
+
+#endif //QTLEAN_MAINWINDOW_H

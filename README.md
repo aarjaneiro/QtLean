@@ -1,11 +1,17 @@
-![logo](images/logo.png)
+![logo](src/logo.png)
 # QtLean
 A Qt interface and build system for QuantConnect's Lean (WIP).
 
 Pictures
 --------
+- Main UI
+  
+  ![ui](images/mainui.png)
+
+
 - Configuration editor
-   ![config](images/img.png)
+  
+   ![config](images/config.png)
  
 
 Current Features
