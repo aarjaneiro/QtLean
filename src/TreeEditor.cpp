@@ -41,7 +41,7 @@ TreeEditor::TreeEditor(const QString &jsonName, QWidget *parent) : QWidget(paren
     submitButton->setDefault(true);
     revertButton = new QPushButton(tr("&Revert Changes"));
     defaultButton = new QPushButton(tr("Default"));
-    quitButton = new QPushButton(tr("Quit"));
+    quitButton = new QPushButton(tr("Close"));
 
     buttonBox = new QDialogButtonBox(Qt::Vertical);
     buttonBox->addButton(submitButton, QDialogButtonBox::ActionRole);
@@ -52,14 +52,14 @@ TreeEditor::TreeEditor(const QString &jsonName, QWidget *parent) : QWidget(paren
     connect(submitButton, &QPushButton::clicked, this, &TreeEditor::submit);
     connect(revertButton, &QPushButton::clicked, this, &TreeEditor::revert);
     connect(defaultButton, &QPushButton::clicked, this, &TreeEditor::to_default);
-    connect(quitButton, &QPushButton::clicked, this, &TreeEditor::close);
+    connect(quitButton, &QPushButton::clicked, this, &TreeEditor::hide);
 
     auto *mainLayout = new QHBoxLayout;
     mainLayout->addWidget(view);
     mainLayout->addWidget(buttonBox);
     setLayout(mainLayout);
 
-    setWindowTitle(tr("Cached Table"));
+    setWindowTitle(tr("Configuration"));
 }
 
 void TreeEditor::submit() {
