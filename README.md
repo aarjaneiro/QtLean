@@ -1,3 +1,4 @@
+![logo](images/logo.png)
 # QtLean
 A Qt interface and build system for QuantConnect's Lean (WIP).
 
@@ -22,6 +23,7 @@ Building
 While currently only a .json editor, the project can be built by running:
 ```shell
 mkdir build && cd build
+../configure
 cmake ..
 make
 
