@@ -52,7 +52,8 @@ MainWindow::MainWindow() {
     QPixmap pix("images/logo.png");
     logo->setPixmap(pix);
 
-    auto *description = new QLabel("Aaron Janeiro Stone (2021) \n \n Usage: Configure your settings and click `Run Algorithm` to launch.");
+    auto *description = new QLabel(
+            "Aaron Janeiro Stone (2021) \n \n Usage: Configure your settings and click `Run Algorithm` to launch.");
     description->setAlignment(Qt::AlignCenter);
 
     mainLayout->addWidget(logo);
