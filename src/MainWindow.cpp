@@ -71,14 +71,14 @@ MainWindow::MainWindow() {
 
 #define MONOSHELL "\
 #/bin/bash \n\
-xterm -e \" cd $PWD/lean_bin\;mono ./QuantConnect.Lean.Launcher.exe \" \n\
+xterm -e \" cd $PWD/Lean/Launcher/bin/Release; mono ./QuantConnect.Lean.Launcher.exe \" \n\
 clear\
 "
 
 void MainWindow::runAlgorithm() {
     // Move config
     std::ifstream source("assets/config/config.json", std::ios::binary);
-    std::ofstream destination("lean_bin/config.json", std::ios::binary);
+    std::ofstream destination("Lean/Launcher/bin/Release/config.json", std::ios::binary);
     destination << source.rdbuf();
     std::cout << "\nSuccessfully copied config.";
     system(MONOSHELL);

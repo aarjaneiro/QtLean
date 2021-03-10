@@ -27,7 +27,6 @@ if (NOT CMAKE_PREFIX_PATH)
 endif ()
 # Config
 execute_process(COMMAND ${CMAKE_SOURCE_DIR}/configure ${CMAKE_SOURCE_DIR} ${Python3_LIBRARIES})
-execute_process(COMMAND rm -r ${CMAKE_BINARY_DIR}/Lean -f)
 message("Moving assets")
 execute_process(COMMAND cp -r ${CMAKE_SOURCE_DIR}/src/assets ${CMAKE_BINARY_DIR}/assets)
 

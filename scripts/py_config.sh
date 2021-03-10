@@ -24,12 +24,14 @@ else
 fi
 echo "Writing Python configuration to Python.Runtime.dll.config"
 
-rm lean_bin/Python.Runtime.dll.config || echo "Nothing to remove"
+rm Lean/Common/Python/Python.Runtime.dll.config || echo "Nothing to remove"
 
-cat <<EOF >>lean_bin/Python.Runtime.dll.config
+cat <<EOF >>Lean/Common/Python/Python.Runtime.dll.config
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
     $MAP_CONF
 </configuration>
 EOF
+cd Lean || exit 1
+msbuild -p:Configuration=Release || dotnet msbuild -p:Configuration=Release || exit 1
 exit 0

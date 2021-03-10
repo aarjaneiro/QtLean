@@ -15,23 +15,10 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-(mkdir lean_bin && mkdir lean_bin/Data) || echo "lean_bin directory exists -- overwriting files..."
 cd Lean || eval "git clone http://github.com/QuantConnect/Lean && cd Lean"
 nuget restore || dotnet restore || exit 1
-msbuild -p:Configuration=Release || dotnet msbuild -p:Configuration=Release || exit 1
-cp -r Launcher/bin/Release/* ../lean_bin
-cp -r Data/* ../lean_bin/Data
 
-if [ "$1" != -ne ]; then
-  echo "Building with examples"
-  mkdir ../Algorithm.CSharp || exit
-  mkdir ../Algorithm.Python || exit
-  cp -r Algorithm.CSharp/* ../Algorithm.CSharp
-  cp -r Algorithm.Python/* ../Algorithm.Python
-fi
-
-cd .. && rm -r Lean -f
-echo "Successfully created Lean binaries"
+echo "Successfully restored Lean to $PWD"
 
 # == Testing with examples == (requires user input)
 #if [ "$1" != -ne ]; then
