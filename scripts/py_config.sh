@@ -15,18 +15,18 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   MAP_CONF="<dllmap os=\"linux\" dll=\"python3.6m\" target=\"$1\"/>"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   MAP_CONF="<dllmap os=\"osx\" dll=\"python3.6m\" target=\"$1\"/>"
-else exit 0
+else
+  exit 0
 fi
 echo "Writing Python configuration to Python.Runtime.dll.config"
 
 rm lean_bin/Python.Runtime.dll.config || echo "Nothing to remove"
 
-cat <<EOF >> lean_bin/Python.Runtime.dll.config
+cat <<EOF >>lean_bin/Python.Runtime.dll.config
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
     $MAP_CONF

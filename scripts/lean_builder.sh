@@ -18,7 +18,7 @@
 (mkdir lean_bin && mkdir lean_bin/Data) || echo "lean_bin directory exists -- overwriting files..."
 cd Lean || eval "git clone http://github.com/QuantConnect/Lean && cd Lean"
 nuget restore || dotnet restore || exit 1
-msbuild -p:Configuration=Release || dotnet msbuild -p:Configuration=Release|| exit 1
+msbuild -p:Configuration=Release || dotnet msbuild -p:Configuration=Release || exit 1
 cp -r Launcher/bin/Release/* ../lean_bin
 cp -r Data/* ../lean_bin/Data
 
