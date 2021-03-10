@@ -17,7 +17,5 @@
 
 echo "Downloading and/or configuring Lean..."
 echo "--------------------------------------"
-cmake qtlean_autogen
-cmake advanced_config
-bash "scripts/lean_builder.sh"
-exec bash "scripts/py_config.sh"
+bash "$1/scripts/lean_builder.sh"
+bash "$1/scripts/py_config.sh" "$2"
