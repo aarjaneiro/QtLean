@@ -79,8 +79,8 @@ void MainWindow::runAlgorithm() {
     destination << source.rdbuf();
     std::cout << "\nSuccessfully copied config.";
     auto mono = MonoContainer("Lean_Mono", "lean_bin/QuantConnect.Lean.Launcher.exe");
-    auto ret = mono.Invoke("QuantConnect.Lean.Launcher", "Program", "Main");
-    printf("%", ret);;
+    void *ret = mono.Exec();
+    printf("%", &ret);
 }
 
 void MainWindow::configure() { editor->show(); }
