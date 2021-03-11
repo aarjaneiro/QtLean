@@ -14,11 +14,16 @@ set(REQUIRED_LIBS_QUALIFIED Qt6::Core Qt6::Gui Qt6::Widgets)
 
 # Includes
 include(FindPackageHandleStandardArgs)
-include_directories(include /usr/include/mono-2.0) # new api
 
-# Find python
+# Find reqs
 find_package(Python3 3.6 EXACT COMPONENTS Interpreter Development)
 message("Python3.6 library files: ${Python3_LIBRARIES}")
+find_library(MONO NAMES mono-2.0)
+message("Mono found: ${MONO}")
+find_library(LIBMONO NAMES mono-native libmono-native)
+message("LIBMONONATIVE found: ${LIBMONO}")
+find_library(LIBMONOSGEN NAMES monosgen monosgen-2.0 libmonosgen libmonosgen-2.0)
+message("LIBMONOSGEN found: ${LIBMONOSGEN}")
 
 
 if (NOT CMAKE_PREFIX_PATH)
@@ -27,15 +32,14 @@ if (NOT CMAKE_PREFIX_PATH)
 endif ()
 # Config
 execute_process(COMMAND ${CMAKE_SOURCE_DIR}/configure ${CMAKE_SOURCE_DIR} ${Python3_LIBRARIES})
-execute_process(COMMAND rm -r ${CMAKE_BINARY_DIR}/Lean -f)
 message("Moving assets")
 execute_process(COMMAND cp -r ${CMAKE_SOURCE_DIR}/src/assets ${CMAKE_BINARY_DIR}/assets)
 
 
 # Building
-add_executable(${PROJECT_NAME} src/main.cpp src/QJsonModel.cpp src/QJsonModel.h src/TreeEditor.h src/TreeEditor.cpp src/MainWindow.cpp src/MainWindow.h)
+add_executable(${PROJECT_NAME} src/main.cpp src/QJsonModel.cpp src/QJsonModel.h src/TreeEditor.h src/TreeEditor.cpp src/MainWindow.cpp src/MainWindow.h src/MonoContainer.cpp src/MonoContainer.h)
 find_package(Qt${QT_VERSION} COMPONENTS ${REQUIRED_LIBS} REQUIRED)
-target_link_libraries(${PROJECT_NAME} ${REQUIRED_LIBS_QUALIFIED} stdc++fs)
+target_link_libraries(${PROJECT_NAME} ${REQUIRED_LIBS_QUALIFIED} stdc++fs ${MONO} ${LIBMONO} ${LIBMONOSGEN})
 
 add_custom_target(copy_asset_files ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory
