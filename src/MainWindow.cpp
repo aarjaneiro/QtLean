@@ -19,6 +19,7 @@
 
 #include "MainWindow.h"
 #include "TreeEditor.h"
+#include "MonoContainer.h"
 #include <QDialogButtonBox>
 #include <QSessionManager>
 #include <QtWidgets>
@@ -69,19 +70,17 @@ MainWindow::MainWindow() {
 }
 
 
-#define MONOSHELL "\
-#/bin/bash \n\
-xterm -e \" cd $PWD/lean_bin\;mono ./QuantConnect.Lean.Launcher.exe \" \n\
-clear\
-"
+
 
 void MainWindow::runAlgorithm() {
     // Move config
     std::ifstream source("assets/config/config.json", std::ios::binary);
-    std::ofstream destination("lean_bin/config.json", std::ios::binary);
+    std::ofstream destination("Lean/Launcher/bin/Debug/config.json", std::ios::binary);
     destination << source.rdbuf();
-    std::cout << "\nSuccessfully copied config.";
-    system(MONOSHELL);
+    std::cout << "\nSuccessfully copied config.\n";
+    auto mono = MonoContainer("QuantConnect.Lean.Launcher", "Lean/Launcher/bin/Debug/QuantConnect.Lean.Launcher.exe");
+    void *ret = mono.Exec();
+    printf("%", &ret);
 }
 
 void MainWindow::configure() { editor->show(); }

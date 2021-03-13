@@ -14,7 +14,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
+echo "Configuring Python"
+echo "=================="
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   MAP_CONF="<dllmap os=\"linux\" dll=\"python3.6m\" target=\"$1\"/>"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
@@ -23,13 +24,20 @@ else
   exit 0
 fi
 echo "Writing Python configuration to Python.Runtime.dll.config"
-
-rm lean_bin/Python.Runtime.dll.config || echo "Nothing to remove"
-
-cat <<EOF >>lean_bin/Python.Runtime.dll.config
+rm Lean/Common/Python/Python.Runtime.dll.config
+cat <<EOF >>Lean/Common/Python/Python.Runtime.dll.config
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
     $MAP_CONF
 </configuration>
 EOF
+
+echo "Building Lean.Launcher"
+echo "======================"
+
+cd Lean || exit 1
+nuget restore || dotnet restore || exit 1
+msbuild -p:Configuration=Debug || dotnet msbuild -p:Configuration=Debug || exit 1
+echo "Successfully configured Lean and Python."
+echo "========================================"
 exit 0
