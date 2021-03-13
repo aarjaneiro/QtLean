@@ -17,6 +17,7 @@
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/mono-config.h>
+#include <execution>
 #include "MonoContainer.h"
 
 MonoContainer::MonoContainer(char *domain, char *assembly) {
@@ -26,8 +27,10 @@ MonoContainer::MonoContainer(char *domain, char *assembly) {
 }
 
 void *MonoContainer::Exec() {
-    char **argv = reinterpret_cast<char **>(mono_assembly_get_name(monoAssembly));
+    chdir("Lean/Launcher/bin/Debug");
+    char **argv = (char **) mono_assembly_get_name(monoAssembly);
     mono_jit_exec(monoDomain, monoAssembly, 1, argv);
+    chdir("../../../..");
 }
 
 MonoContainer::~MonoContainer() {

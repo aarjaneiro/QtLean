@@ -18,7 +18,7 @@
   "coinapi-product": "free",
   "data-aggregator": "QuantConnect.Lean.Engine.DataFeeds.AggregationManager",
   "data-channel-provider": "DataChannelProvider",
-  "data-folder": "Data/",
+  "data-folder": "../../../Data/",
   "data-provider": "QuantConnect.Lean.Engine.DataFeeds.DefaultDataProvider",
   "debugging": "false",
   "debugging-method": "LocalCmdline",

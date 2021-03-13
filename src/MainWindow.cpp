@@ -75,10 +75,10 @@ MainWindow::MainWindow() {
 void MainWindow::runAlgorithm() {
     // Move config
     std::ifstream source("assets/config/config.json", std::ios::binary);
-    std::ofstream destination("lean_bin/config.json", std::ios::binary);
+    std::ofstream destination("Lean/Launcher/bin/Debug/config.json", std::ios::binary);
     destination << source.rdbuf();
-    std::cout << "\nSuccessfully copied config.";
-    auto mono = MonoContainer("Lean_Mono", "lean_bin/QuantConnect.Lean.Launcher.exe");
+    std::cout << "\nSuccessfully copied config.\n";
+    auto mono = MonoContainer("QuantConnect.Lean.Launcher", "Lean/Launcher/bin/Debug/QuantConnect.Lean.Launcher.exe");
     void *ret = mono.Exec();
     printf("%", &ret);
 }
