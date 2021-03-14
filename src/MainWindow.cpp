@@ -78,9 +78,7 @@ void MainWindow::runAlgorithm() {
     std::ofstream destination("Lean/Launcher/bin/Debug/config.json", std::ios::binary);
     destination << source.rdbuf();
     std::cout << "\nSuccessfully copied config.\n";
-    auto mono = MonoContainer("QuantConnect.Lean.Launcher", "Lean/Launcher/bin/Debug/QuantConnect.Lean.Launcher.exe");
-    void *ret = mono.Exec();
-    printf("%", &ret);
+    MonoContainer::Exec();
 }
 
 void MainWindow::configure() { editor->show(); }

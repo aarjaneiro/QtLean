@@ -222,6 +222,7 @@
   "tt-rest-environment": "",
   "tt-session-password": "",
   "tt-user-name": "",
-  "us-energy-information-auth-token": ""
+  "us-energy-information-auth-token": "",
+  "close-automatically": "true"
 }
 

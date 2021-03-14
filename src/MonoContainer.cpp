@@ -14,27 +14,30 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#include <mono/jit/jit.h>
-#include <mono/metadata/assembly.h>
-#include <mono/metadata/mono-config.h>
-#include <execution>
+#include <QtCore>
+#include <iostream>
+#include <QThread>
+#include <thread>
 #include "MonoContainer.h"
+#include "QLeanThread.h"
 
-MonoContainer::MonoContainer(char *domain, char *assembly) {
-    mono_config_parse(NULL);
-    monoDomain = mono_jit_init(domain);
-    monoAssembly = mono_domain_assembly_open(monoDomain, assembly);
-}
+MonoContainer::MonoContainer() = default;
 
-void *MonoContainer::Exec() {
-    chdir("Lean/Launcher/bin/Debug");
-    char **argv = (char **) mono_assembly_get_name(monoAssembly);
-    mono_jit_exec(monoDomain, monoAssembly, 1, argv);
-    chdir("../../../..");
-}
-
-MonoContainer::~MonoContainer() {
-    mono_jit_cleanup(monoDomain);
-    mono_assembly_close(monoAssembly);
+int MonoContainer::Exec() {
+    std::cout << "=======================\n Entering Lean process \n=======================\n";
+    auto *qthread = new QThread;
+    auto *qThreadWorker = new QLeanThread;
+    qThreadWorker->moveToThread(qthread);
+    QAbstractEventDispatcher::connect(qthread, SIGNAL(started()), qThreadWorker, SLOT(RunLean()));
+    QAbstractEventDispatcher::connect(qThreadWorker, SIGNAL(lean_exit()), qthread, SLOT(quit()));
+    QAbstractEventDispatcher::connect(qthread, SIGNAL(finished()), qThreadWorker, SLOT(deleteLater()));
+    QAbstractEventDispatcher::connect(qthread, SIGNAL(finished()), qthread, SLOT(deleteLater()));
+    qthread->start();
+    while (!(qthread->isFinished())) {
+        sleep(1); // To fix crashing, try waiting for user input (SIGTRAP?)
+    }
+    qthread->quit();
+    std::cout << "=======================\n Exited Lean process \n=======================\n";
+    return 0;
 }
 
