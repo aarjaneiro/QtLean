@@ -14,29 +14,42 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#include <QtCore>
 #include <iostream>
-#include <QThread>
 #include <thread>
 #include "MonoContainer.h"
-#include "QLeanThread.h"
+#include <mono/jit/jit.h>
+#include <mono/metadata/assembly.h>
+#include <mono/metadata/mono-config.h>
+#include <execution>
+
+bool exitmono;
+
+void *RunLean(void *pVoid) {
+    mono_config_parse(NULL);
+    chdir("Lean/Launcher/bin/Debug");
+    auto monoDomain = mono_jit_init("QuantConnect.Lean.Launcher");
+    auto monoAssembly = mono_domain_assembly_open(monoDomain, "QuantConnect.Lean.Launcher.exe");
+    char **argv = (char **) mono_assembly_get_name(monoAssembly);
+    while (!exitmono) {
+        mono_jit_exec(monoDomain, monoAssembly, 1, argv);
+    } // should be own process?
+    mono_jit_cleanup(monoDomain);
+    mono_assembly_close(monoAssembly);
+    chdir("../../../..");
+}
+
 
 MonoContainer::MonoContainer() = default;
 
 int MonoContainer::Exec() {
     std::cout << "=======================\n Entering Lean process \n=======================\n";
-    auto *qthread = new QThread;
-    auto *qThreadWorker = new QLeanThread;
-    qThreadWorker->moveToThread(qthread);
-    QAbstractEventDispatcher::connect(qthread, SIGNAL(started()), qThreadWorker, SLOT(RunLean()));
-    QAbstractEventDispatcher::connect(qThreadWorker, SIGNAL(lean_exit()), qthread, SLOT(quit()));
-    QAbstractEventDispatcher::connect(qthread, SIGNAL(finished()), qThreadWorker, SLOT(deleteLater()));
-    QAbstractEventDispatcher::connect(qthread, SIGNAL(finished()), qthread, SLOT(deleteLater()));
-    qthread->start();
-    while (!(qthread->isFinished())) {
-        sleep(1); // To fix crashing, try waiting for user input (SIGTRAP?)
-    }
-    qthread->quit();
+    pthread_t thread;
+    pthread_create(&thread, nullptr, RunLean, nullptr);
+    std::cin.get();
+    exitmono = true;
+    pthread_cancel(thread);
+    pthread_detach(thread);
+    _pthread_cleanup_buffer();
     std::cout << "=======================\n Exited Lean process \n=======================\n";
     return 0;
 }
