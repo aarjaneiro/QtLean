@@ -24,7 +24,7 @@ class MonoContainer {
 public:
     MonoContainer();
 
-    static int Exec();
+    static void Exec();
 };
 
 

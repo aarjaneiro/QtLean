@@ -24,15 +24,14 @@
 
 bool exitmono;
 
-void *RunLean(void *pVoid) {
+void *RunLean() {
+
     mono_config_parse(NULL);
     chdir("Lean/Launcher/bin/Debug");
     auto monoDomain = mono_jit_init("QuantConnect.Lean.Launcher");
     auto monoAssembly = mono_domain_assembly_open(monoDomain, "QuantConnect.Lean.Launcher.exe");
     char **argv = (char **) mono_assembly_get_name(monoAssembly);
-    while (!exitmono) {
-        mono_jit_exec(monoDomain, monoAssembly, 1, argv);
-    } // should be own process?
+    mono_jit_exec(monoDomain, monoAssembly, 1, argv);
     mono_jit_cleanup(monoDomain);
     mono_assembly_close(monoAssembly);
     chdir("../../../..");
@@ -41,16 +40,9 @@ void *RunLean(void *pVoid) {
 
 MonoContainer::MonoContainer() = default;
 
-int MonoContainer::Exec() {
-    std::cout << "=======================\n Entering Lean process \n=======================\n";
-    pthread_t thread;
-    pthread_create(&thread, nullptr, RunLean, nullptr);
-    std::cin.get();
-    exitmono = true;
-    pthread_cancel(thread);
-    pthread_detach(thread);
-    _pthread_cleanup_buffer();
-    std::cout << "=======================\n Exited Lean process \n=======================\n";
-    return 0;
+void MonoContainer::Exec() {
+    if (fork() == 0) {
+        RunLean();
+    }
 }
 
