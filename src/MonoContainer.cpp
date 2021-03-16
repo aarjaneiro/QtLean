@@ -14,27 +14,35 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+#include <iostream>
+#include <thread>
+#include "MonoContainer.h"
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/mono-config.h>
 #include <execution>
-#include "MonoContainer.h"
 
-MonoContainer::MonoContainer(char *domain, char *assembly) {
+bool exitmono;
+
+void *RunLean() {
+
     mono_config_parse(NULL);
-    monoDomain = mono_jit_init(domain);
-    monoAssembly = mono_domain_assembly_open(monoDomain, assembly);
-}
-
-void *MonoContainer::Exec() {
     chdir("Lean/Launcher/bin/Debug");
+    auto monoDomain = mono_jit_init("QuantConnect.Lean.Launcher");
+    auto monoAssembly = mono_domain_assembly_open(monoDomain, "QuantConnect.Lean.Launcher.exe");
     char **argv = (char **) mono_assembly_get_name(monoAssembly);
     mono_jit_exec(monoDomain, monoAssembly, 1, argv);
+    mono_jit_cleanup(monoDomain);
+    mono_assembly_close(monoAssembly);
     chdir("../../../..");
 }
 
-MonoContainer::~MonoContainer() {
-    mono_jit_cleanup(monoDomain);
-    mono_assembly_close(monoAssembly);
+
+MonoContainer::MonoContainer() = default;
+
+void MonoContainer::Exec() {
+    if (fork() == 0) {
+        RunLean();
+    }
 }
 

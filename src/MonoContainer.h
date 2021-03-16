@@ -22,15 +22,9 @@
 
 class MonoContainer {
 public:
-    MonoContainer(char *domain, char *assembly);
+    MonoContainer();
 
-    void * Exec();
-
-    ~MonoContainer();
-
-private:
-    MonoDomain *monoDomain;
-    MonoAssembly *monoAssembly;
+    static void Exec();
 };
 
 
