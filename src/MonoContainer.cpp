@@ -14,18 +14,13 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#include <iostream>
-#include <thread>
 #include "MonoContainer.h"
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/mono-config.h>
 #include <execution>
 
-bool exitmono;
-
 void *RunLean() {
-
     mono_config_parse(NULL);
     chdir("Lean/Launcher/bin/Debug");
     auto monoDomain = mono_jit_init("QuantConnect.Lean.Launcher");
