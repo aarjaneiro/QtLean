@@ -22,7 +22,7 @@
 
 void *RunLean() {
     mono_config_parse(NULL);
-    chdir("Lean/Launcher/bin/Debug");
+    chdir("Launcher/bin/Debug");
     auto monoDomain = mono_jit_init("QuantConnect.Lean.Launcher");
     auto monoAssembly = mono_domain_assembly_open(monoDomain, "QuantConnect.Lean.Launcher.exe");
     char **argv = (char **) mono_assembly_get_name(monoAssembly);

@@ -76,7 +76,7 @@ MainWindow::MainWindow() {
 void MainWindow::runAlgorithm() {
     // Move config
     std::ifstream source("assets/config/config.json", std::ios::binary);
-    std::ofstream destination("Lean/Launcher/bin/Debug/config.json", std::ios::binary);
+    std::ofstream destination("Launcher/bin/Debug/config.json", std::ios::binary);
     destination << source.rdbuf();
     std::cout << "\nSuccessfully copied config.\n";
     MonoContainer::Exec();
