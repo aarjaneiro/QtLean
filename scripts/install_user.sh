@@ -25,9 +25,9 @@ cat <<EOF >>/usr/bin/QtLean
 if [[ "$PWD" != *Lean* ]]; then
     echo "WARNING: qtlean should be run from Lean's root directory."
 fi
-ln -s /usr/lib/qtlean/* . || echo "WARNING: Was not able to make links!"
+ln -s /usr/lib/qtlean/qtlean . || echo "WARNING: Was not able to make links!"
+cp -r /usr/lib/qtlean/assets . || echo "WARNING: Was not able to make config!"
 ./qtlean
-rm -r assets
 rm qtlean
 EOF
-chmod 755 /usr/bin/qtlean
+chmod 755 /usr/bin/QtLean

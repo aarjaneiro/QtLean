@@ -92,4 +92,4 @@ To use the configured Lean directory elsewhere, simply execute `cp -r your/path/
 Installation
 ------------
 After building, run the `install_user.sh` script in the build directory. Note that you will likely need to run this as a
-super user.
+super user. 

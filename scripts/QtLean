@@ -20,5 +20,4 @@ if [[ "$PWD" != *"Lean"* ]]; then
 fi
 (ln -s ../assets . && ln -s ../qtlean .) || echo "WARNING: Was not able to make links!"
 ./qtlean
-rm -r assets
 rm qtlean
