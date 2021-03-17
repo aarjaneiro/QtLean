@@ -20,13 +20,12 @@ Current Features
 -----------------
 
 1. JSON TreeView editor.
+2. Automatic Mono + Python setup.
 
 TODO
 ----
 
-1. Add interfacing with mono via embedding.
-2. Add fully automatic Python configuration via cmake.
-3. Add charting.
+1. Add charting.
 
 Dependencies
 ------------
