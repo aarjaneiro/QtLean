@@ -16,6 +16,7 @@
 
 #ifndef QTLEAN_MONOCONTAINER_H
 #define QTLEAN_MONOCONTAINER_H
+
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
 
@@ -23,7 +24,6 @@
 class MonoContainer {
 public:
     MonoContainer();
-
     static void Exec();
 };
 

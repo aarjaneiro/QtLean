@@ -67,10 +67,11 @@ MainWindow::MainWindow() {
     mainWidget->setLayout(mainLayout);
     setCentralWidget(mainWidget);
     setWindowTitle(tr("QtLean"));
+    auto icon = QIcon(QPixmap("assets/icon.png"));
+    this->setWindowIcon(icon);
+//    auto tray = QSystemTrayIcon(icon);
+//    tray.show();
 }
-
-
-
 
 void MainWindow::runAlgorithm() {
     // Move config
@@ -81,6 +82,8 @@ void MainWindow::runAlgorithm() {
     MonoContainer::Exec();
 }
 
-void MainWindow::configure() { editor->show(); }
+void MainWindow::configure() {
+    editor->show();
+}
 
 #pragma clang diagnostic pop

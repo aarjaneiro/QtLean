@@ -44,7 +44,7 @@ TreeEditor::TreeEditor(const QString &jsonName, QWidget *parent) : QWidget(paren
     connect(submitButton, &QPushButton::clicked, this, &TreeEditor::submit);
     connect(revertButton, &QPushButton::clicked, this, &TreeEditor::revert);
     connect(defaultButton, &QPushButton::clicked, this, &TreeEditor::to_default);
-    connect(quitButton, &QPushButton::clicked, this, &TreeEditor::hide);
+    connect(quitButton, &QPushButton::clicked, this, &TreeEditor::close);
 
     auto *mainLayout = new QHBoxLayout;
     mainLayout->addWidget(view);

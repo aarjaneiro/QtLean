@@ -5,12 +5,15 @@ message("Build: ${CMAKE_BINARY_DIR}")
 
 # Set vars
 set(CMAKE_CXX_STANDARD 17)
+set(QT_FEATURE_glib:INTERNAL ON)
+set(QT_FEATURE_glibc:INTERNAL ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(QT_VERSION 6)
 set(REQUIRED_LIBS Core Gui Widgets)
 set(REQUIRED_LIBS_QUALIFIED Qt6::Core Qt6::Gui Qt6::Widgets)
+set(ASSETS src/assets)
 
 # Includes
 include(FindPackageHandleStandardArgs)
@@ -27,6 +30,9 @@ message("LIBMONOSGEN found: ${LIBMONOSGEN}")
 find_library(LIBTBB NAMES libtbb tbb)
 message("LIBTBB found: ${LIBTBB}")
 
+if (NOT Python3_LIBRARIES)
+    message(WARNING "Python configuration could not be completed automatically. Please specify it youself under Lean/Common/Python/PythonRuntime.dll.config after installation.")
+endif ()
 
 if (NOT CMAKE_PREFIX_PATH)
     message(WARNING "CMAKE_PREFIX_PATH is not defined, you may need to set it "
@@ -46,5 +52,7 @@ target_link_libraries(${PROJECT_NAME} ${REQUIRED_LIBS_QUALIFIED} stdc++fs ${MONO
 add_custom_target(copy_asset_files ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/src/assets
-        ${CMAKE_BINARY_DIR}/assets
-        )
+        ${CMAKE_BINARY_DIR}/assets)
+install(TARGETS ${PROJECT_NAME}
+        RUNTIME DESTINATION ${PROJECT_BINARY_DIR})
+install(DIRECTORY ${ASSETS} DESTINATION ${PROJECT_BINARY_DIR})
