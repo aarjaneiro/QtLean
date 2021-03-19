@@ -3,6 +3,13 @@ project(QtLean)
 message("Sources: ${CMAKE_SOURCE_DIR}")
 message("Build: ${CMAKE_BINARY_DIR}")
 
+# For packaging
+if (EXISTS dependencies)
+    message("dependencies folder exists and will be appended to search path.")
+    set(CMAKE_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/dependencies/include:${CMAKE_INCLUDE_PATH})
+    set(CMAKE_LIBRARY_PATH ${CMAKE_SOURCE_DIR}/dependencies/lib:${CMAKE_LIBRARY_PATH})
+endif ()
+
 # Set vars
 set(CMAKE_CXX_STANDARD 17)
 set(QT_FEATURE_glib:INTERNAL ON)
@@ -19,7 +26,7 @@ set(ASSETS src/assets)
 include(FindPackageHandleStandardArgs)
 
 # Find reqs
-find_package(Python3 3.6 EXACT COMPONENTS Interpreter Development)
+find_library(Python3_LIBRARIES NAMES python3.6m libpython3.6m)
 message("Python3.6 library files: ${Python3_LIBRARIES}")
 find_library(MONO NAMES mono-2.0)
 message("Mono found: ${MONO}")
@@ -31,7 +38,7 @@ find_library(LIBTBB NAMES libtbb tbb)
 message("LIBTBB found: ${LIBTBB}")
 
 if (NOT Python3_LIBRARIES)
-    message(WARNING "Python configuration could not be completed automatically. Please specify it youself under Lean/Common/Python/PythonRuntime.dll.config after installation.")
+    message(WARNING "Python configuration could not be completed automatically. Please specify it yourself under Lean/Common/Python/PythonRuntime.dll.config after installation.")
 endif ()
 
 if (NOT CMAKE_PREFIX_PATH)
