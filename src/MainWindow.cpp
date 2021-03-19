@@ -29,6 +29,10 @@
 
 MainWindow::MainWindow() {
     m_dir = std::string(get_current_dir_name());
+    if (m_dir.substr(m_dir.length() - 3) == "bin") {
+        chdir("..");
+        m_dir = std::string(get_current_dir_name());
+    }
     c_dir = m_dir;
     auto config = m_dir;
     config.append("/lib/QtLean/assets/config/");
