@@ -50,6 +50,7 @@ private:
     QPushButton *quitButton;
     QDialogButtonBox *buttonBox;
     QJsonModel *model;
+    std::string root_dir;
 };
 
 

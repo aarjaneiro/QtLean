@@ -17,12 +17,14 @@
 #include <QTreeView>
 #include <QtWidgets>
 #include <QFile>
+#include <iostream>
 #include "QJsonModel.h"
 #include "TreeEditor.h"
 
 TreeEditor::TreeEditor(const QString &jsonName, QWidget *parent) : QWidget(parent) {
+    root_dir = jsonName.toStdString();
     model = new QJsonModel(this);
-    model->load(jsonName);
+    model->load((root_dir + "config.json").data());
     model->setHeaderData(0, Qt::Vertical, tr("Key"));
     model->setHeaderData(1, Qt::Vertical, tr("Value"));
 
@@ -55,14 +57,15 @@ TreeEditor::TreeEditor(const QString &jsonName, QWidget *parent) : QWidget(paren
 }
 
 void TreeEditor::submit() {
+    std::cout << "\nConfiguration loaded at: " << (root_dir + "config.json").data();
     auto json_doc = model->json().toJson();
-    QFile save("assets/config/config.json");
+    QFile save((root_dir + "config.json").data());
     save.open(QIODevice::ReadWrite | QIODevice::Text);
     save.write(json_doc);
 }
 
 void TreeEditor::revert() {
-    model->load("assets/config/config.json");
+    model->load((root_dir + "config.json").data());
     model->setHeaderData(0, Qt::Vertical, tr("Key"));
     model->setHeaderData(1, Qt::Vertical, tr("Value"));
 
@@ -71,7 +74,7 @@ void TreeEditor::revert() {
 }
 
 void TreeEditor::to_default() {
-    model->load("assets/config/default_config.json");
+    model->load((root_dir + "default_config.json").data());
     model->setHeaderData(0, Qt::Vertical, tr("Key"));
     model->setHeaderData(1, Qt::Vertical, tr("Value"));
 

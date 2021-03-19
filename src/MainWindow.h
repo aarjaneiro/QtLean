@@ -44,6 +44,9 @@ private slots:
 
     void configure();
 
+    void lean_dir();
+
+
 private:
     QLabel *logo;
     TreeEditor *editor;
@@ -52,6 +55,9 @@ private:
     QPushButton *confButton;
     QPushButton *quitButton;
     QDialogButtonBox *dialog;
+    QPushButton *leanButton;
+    std::basic_string<char> c_dir; // for lean/directory changes
+    std::basic_string<char> m_dir; // for main (install) directory
 };
 
 

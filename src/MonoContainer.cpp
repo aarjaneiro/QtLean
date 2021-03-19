@@ -29,7 +29,7 @@ void *RunLean() {
     mono_jit_exec(monoDomain, monoAssembly, 1, argv);
     mono_jit_cleanup(monoDomain);
     mono_assembly_close(monoAssembly);
-    chdir("../../../..");
+    chdir("../../..");
 }
 
 

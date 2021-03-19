@@ -25,11 +25,16 @@
 #include <QtWidgets>
 #include <fstream>
 #include <iostream>
+#include <execution>
 
 MainWindow::MainWindow() {
-    QString cwd = "assets/config/config.json";
+    m_dir = std::string(get_current_dir_name());
+    c_dir = m_dir;
+    auto config = m_dir;
+    config.append("/lib/QtLean/assets/config/");
+    QString cwd = config.data();
     std::cout << "\nConfiguration loaded at: ";
-    std::cout << cwd.toStdString();
+    std::cout << cwd.toStdString() << "config.json";
 
     // Initialize widgets
     logo = new QLabel;
@@ -39,16 +44,19 @@ MainWindow::MainWindow() {
     runButton = new QPushButton(tr("&Run Algorithm"));
     confButton = new QPushButton(tr("&Configure"));
     quitButton = new QPushButton(tr("&Quit"));
+    leanButton = new QPushButton(tr("&Lean Directory"));
 
     dialog = new QDialogButtonBox(Qt::Horizontal);
     dialog->addButton(runButton, QDialogButtonBox::ActionRole);
     dialog->addButton(confButton, QDialogButtonBox::ActionRole);
+    dialog->addButton(leanButton, QDialogButtonBox::ActionRole);
     dialog->addButton(quitButton, QDialogButtonBox::RejectRole);
     connect(runButton, &QPushButton::clicked, this, &MainWindow::runAlgorithm);
     connect(confButton, &QPushButton::clicked, this, &MainWindow::configure);
+    connect(leanButton, &QPushButton::clicked, this, &MainWindow::lean_dir);
     connect(quitButton, &QPushButton::clicked, this, &MainWindow::close);
 
-    QPixmap pix("assets/logo.png");
+    QPixmap pix("lib/QtLean/assets/logo.png");
     logo->setPixmap(pix);
 
     auto *description = new QLabel(
@@ -67,7 +75,7 @@ MainWindow::MainWindow() {
     mainWidget->setLayout(mainLayout);
     setCentralWidget(mainWidget);
     setWindowTitle(tr("QtLean"));
-    auto icon = QIcon(QPixmap("assets/icon.png"));
+    auto icon = QIcon(QPixmap("lib/QtLean/assets/icon.png"));
     this->setWindowIcon(icon);
 //    auto tray = QSystemTrayIcon(icon);
 //    tray.show();
@@ -75,10 +83,14 @@ MainWindow::MainWindow() {
 
 void MainWindow::runAlgorithm() {
     // Move config
-    std::ifstream source("assets/config/config.json", std::ios::binary);
-    std::ofstream destination("Launcher/bin/Debug/config.json", std::ios::binary);
+    auto des = c_dir;
+    auto src = m_dir;
+    des.append("/Launcher/bin/Debug/config.json");
+    src.append("/lib/QtLean/assets/config/config.json");
+    std::ifstream source(src, std::ios::binary);
+    std::ofstream destination(des, std::ios::binary);
     destination << source.rdbuf();
-    std::cout << "\nSuccessfully copied config.\n";
+    std::cout << "\nSuccessfully copied config to " << des << "\n";
     MonoContainer::Exec();
 }
 
@@ -86,4 +98,11 @@ void MainWindow::configure() {
     editor->show();
 }
 
-#pragma clang diagnostic pop
+void MainWindow::lean_dir() {
+    c_dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                              "/home",
+                                              QFileDialog::ShowDirsOnly
+                                              | QFileDialog::DontResolveSymlinks).toStdString();
+    std::cout << "\nChanging Lean directory to " << std::string(c_dir) << "\n";
+    chdir(c_dir.data());
+}

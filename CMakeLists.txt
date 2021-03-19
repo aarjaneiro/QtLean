@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(qtlean)
+project(QtLean)
 message("Sources: ${CMAKE_SOURCE_DIR}")
 message("Build: ${CMAKE_BINARY_DIR}")
 
@@ -41,9 +41,7 @@ endif ()
 # Config
 execute_process(COMMAND ${CMAKE_SOURCE_DIR}/configure ${CMAKE_SOURCE_DIR} ${Python3_LIBRARIES})
 message("Moving assets")
-execute_process(COMMAND cp -r ${CMAKE_SOURCE_DIR}/src/assets ${CMAKE_BINARY_DIR})
-execute_process(COMMAND cp ${CMAKE_SOURCE_DIR}/scripts/install_user.sh ${CMAKE_BINARY_DIR})
-execute_process(COMMAND cp ${CMAKE_SOURCE_DIR}/scripts/QtLean ${CMAKE_BINARY_DIR})
+execute_process(COMMAND cp -r ${CMAKE_SOURCE_DIR}/src/assets ${CMAKE_BINARY_DIR}/lib/${PROJECT_NAME}/assets)
 
 
 # Building
@@ -54,7 +52,7 @@ target_link_libraries(${PROJECT_NAME} ${REQUIRED_LIBS_QUALIFIED} stdc++fs ${MONO
 add_custom_target(copy_asset_files ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/src/assets
-        ${CMAKE_BINARY_DIR}/assets)
+        ${CMAKE_BINARY_DIR}/lib/${PROJECT_NAME}/assets)
 install(TARGETS ${PROJECT_NAME}
-        RUNTIME DESTINATION ${PROJECT_BINARY_DIR})
-install(DIRECTORY ${ASSETS} DESTINATION ${PROJECT_BINARY_DIR})
+        RUNTIME DESTINATION ${PROJECT_BINARY_DIR}/bin)
+install(DIRECTORY ${ASSETS} DESTINATION ${PROJECT_BINARY_DIR}/lib/${PROJECT_NAME})
