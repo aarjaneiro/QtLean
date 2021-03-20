@@ -42,10 +42,17 @@ The project can be built by running:
 ```shell
 mkdir build && cd build
 cmake ..
-make # or `make install` if installing
+make
 
 ```
 
+and installed to /usr/ by running:
+
+```shell
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make install
+```
 
 If you run into issues, note that one can execute `make {OPTION}` for any of the following options:
 

@@ -14,9 +14,6 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "readability-convert-member-functions-to-static"
-
 #include "MainWindow.h"
 #include "TreeEditor.h"
 #include "MonoContainer.h"
@@ -28,6 +25,9 @@
 #include <execution>
 
 MainWindow::MainWindow() {
+#ifdef NDEBUG
+    chdir("/usr/local");
+#endif
     m_dir = std::string(get_current_dir_name());
     if (m_dir.substr(m_dir.length() - 3) == "bin") {
         chdir("..");
