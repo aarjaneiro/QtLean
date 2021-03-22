@@ -46,15 +46,16 @@ if (NOT CMAKE_PREFIX_PATH)
             "(-DCMAKE_PREFIX_PATH=\"path/to/Qt/lib/cmake\" or -DCMAKE_PREFIX_PATH=/usr/include/{host}/qt{version}/ on Ubuntu)")
 endif ()
 # Config
-execute_process(COMMAND ${CMAKE_SOURCE_DIR}/configure ${CMAKE_SOURCE_DIR} ${Python3_LIBRARIES})
 message("Moving assets")
 execute_process(COMMAND cp -r ${CMAKE_SOURCE_DIR}/src/assets ${CMAKE_BINARY_DIR}/lib/${PROJECT_NAME}/assets)
+configure_file(src/PythonConfig.h.in ${CMAKE_BINARY_DIR}/lib/${PROJECT_NAME}/assets/PythonConfig.h @ONLY)
 
 
 # Building
 add_executable(${PROJECT_NAME} src/main.cpp src/QJsonModel.cpp src/QJsonModel.h src/TreeEditor.h src/TreeEditor.cpp src/MainWindow.cpp src/MainWindow.h src/MonoContainer.cpp src/MonoContainer.h)
 find_package(Qt${QT_VERSION} COMPONENTS ${REQUIRED_LIBS} REQUIRED)
 target_link_libraries(${PROJECT_NAME} ${REQUIRED_LIBS_QUALIFIED} stdc++fs ${MONO} ${LIBMONO} ${LIBMONOSGEN} ${LIBTBB})
+include_directories(${CMAKE_BINARY_DIR}/lib/${PROJECT_NAME}/assets)
 
 add_custom_target(copy_asset_files ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory

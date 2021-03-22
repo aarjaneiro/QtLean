@@ -17,6 +17,7 @@
 #include "MainWindow.h"
 #include "TreeEditor.h"
 #include "MonoContainer.h"
+#include "PythonConfig.h"
 #include <QDialogButtonBox>
 #include <QSessionManager>
 #include <QtWidgets>
@@ -86,15 +87,24 @@ MainWindow::MainWindow() {
 }
 
 void MainWindow::runAlgorithm() {
-    // Move config
+    // Dir variables
     auto des = c_dir;
     auto src = m_dir;
-    des.append("/Launcher/bin/Debug/config.json");
+    std::ofstream pydestination(des + "/Common/Python/Python.Runtime.dll.config", std::ios::binary);
+    pydestination << PyConfig;
+    std::cout << "\nSuccessfully copied Python config to " << des + "/Common/Python/Python.Runtime.dll.config" << "\n";
+
+
+    // Move Lean config
+    des.append("/Launcher/config.json");
     src.append("/lib/QtLean/assets/config/config.json");
     std::ifstream source(src, std::ios::binary);
     std::ofstream destination(des, std::ios::binary);
     destination << source.rdbuf();
     std::cout << "\nSuccessfully copied config to " << des << "\n";
+    std::cout << "\n============== Building Project ==============\n";
+    system("msbuild -p:Configuration=Debug || dotnet msbuild -p:Configuration=Debug || exit 1");
+    std::cout << "\n============== Running  Project ==============\n";
     MonoContainer::Exec();
 }
 
