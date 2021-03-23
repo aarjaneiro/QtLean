@@ -21,8 +21,9 @@
 #include "QJsonModel.h"
 #include "TreeEditor.h"
 
-TreeEditor::TreeEditor(const QString &jsonName, QWidget *parent) : QWidget(parent) {
-    root_dir = jsonName.toStdString();
+TreeEditor::TreeEditor(const std::basic_string<char, std::char_traits<char>, std::allocator<char>> jsonName,
+                       QWidget *parent) : QWidget(parent) {
+    root_dir = jsonName;
     model = new QJsonModel(this);
     model->load((root_dir + "config.json").data());
     model->setHeaderData(0, Qt::Vertical, tr("Key"));

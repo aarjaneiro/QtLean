@@ -27,23 +27,16 @@
 
 MainWindow::MainWindow() {
 #ifdef NDEBUG
-    chdir("/usr/local");
+    chdir("/");
 #endif
     m_dir = std::string(get_current_dir_name());
-    if (m_dir.substr(m_dir.length() - 3) == "bin") {
-        chdir("..");
-        m_dir = std::string(get_current_dir_name());
-    }
     c_dir = m_dir;
-    auto config = m_dir;
-    config.append("/lib/QtLean/assets/config/");
-    QString cwd = config.data();
-    std::cout << "\nConfiguration loaded at: ";
-    std::cout << cwd.toStdString() << "config.json";
+    auto conf = std::string(ASSET_DIR).append("/config/");
+    std::cout << "Config directory set to " << conf;
 
     // Initialize widgets
     logo = new QLabel;
-    editor = new TreeEditor(cwd);
+    editor = new TreeEditor(conf);
     mainWidget = new QWidget;
     auto *mainLayout = new QVBoxLayout;
     runButton = new QPushButton(tr("&Run Algorithm"));
@@ -61,7 +54,7 @@ MainWindow::MainWindow() {
     connect(leanButton, &QPushButton::clicked, this, &MainWindow::lean_dir);
     connect(quitButton, &QPushButton::clicked, this, &MainWindow::close);
 
-    QPixmap pix("lib/QtLean/assets/logo.png");
+    QPixmap pix(std::string(ASSET_DIR).append("/logo.png").data());
     logo->setPixmap(pix);
 
     auto *description = new QLabel(
@@ -80,7 +73,7 @@ MainWindow::MainWindow() {
     mainWidget->setLayout(mainLayout);
     setCentralWidget(mainWidget);
     setWindowTitle(tr("QtLean"));
-    auto icon = QIcon(QPixmap("lib/QtLean/assets/icon.png"));
+    auto icon = QIcon(QPixmap(std::string(ASSET_DIR).append("/icon.png").data()));
     this->setWindowIcon(icon);
 //    auto tray = QSystemTrayIcon(icon);
 //    tray.show();
@@ -97,7 +90,7 @@ void MainWindow::runAlgorithm() {
 
     // Move Lean config
     des.append("/Launcher/config.json");
-    src.append("/lib/QtLean/assets/config/config.json");
+    src.append(std::string(ASSET_DIR).append("/config/config.json"));
     std::ifstream source(src, std::ios::binary);
     std::ofstream destination(des, std::ios::binary);
     destination << source.rdbuf();

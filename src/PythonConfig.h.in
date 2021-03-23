@@ -17,6 +17,11 @@
 // This file is meant to be configured using CMake.
 #include <sstream>
 
+#ifdef NDEBUG
+#cmakedefine ASSET_DIR "@ASSET_DIR@"
+#else
+#cmakedefine ASSET_DIR "@ASSET_DIR_DEB@"
+#endif
 #cmakedefine Python3_LIBRARIES "@Python3_LIBRARIES@"
 #if __linux__
 #define MAP_CONF "<dllmap os=\"linux\" dll=\"python3.6m\" target=\""

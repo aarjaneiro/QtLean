@@ -12,6 +12,7 @@ endif ()
 
 # Set vars
 set(CMAKE_CXX_STANDARD 17)
+set(USER $ENV{USER})
 set(QT_FEATURE_glib:INTERNAL ON)
 set(QT_FEATURE_glibc:INTERNAL ON)
 set(CMAKE_AUTOMOC ON)
@@ -22,8 +23,18 @@ set(REQUIRED_LIBS Core Gui Widgets)
 set(REQUIRED_LIBS_QUALIFIED Qt6::Core Qt6::Gui Qt6::Widgets)
 set(ASSETS src/assets)
 
-# Includes
+# Includes + Packaging
 include(FindPackageHandleStandardArgs)
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "QtLean -- a GUI interface to the Lean trading engine.")
+set(CPACK_PACKAGE_VENDOR "Aaron Janeiro Stone")
+set(CPACK_PACKAGE_CONTACT "ajstone@uwaterloo.ca")
+set(CPACK_PACKAGE_VERSION_MAJOR "0")
+set(CPACK_PACKAGE_VERSION_MINOR "7")
+set(CPACK_PACKAGE_VERSION_PATCH "1")
+set(CPACK_COMPONENT_LIBRARIES_DEPENDS "mono-native" "python3.6" "qt6")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-native" "python3.6" "qt6")
+include(CPack)
+
 
 # Find reqs
 find_library(Python3_LIBRARIES NAMES python3.6m libpython3.6m)
@@ -47,20 +58,22 @@ if (NOT CMAKE_PREFIX_PATH)
 endif ()
 # Config
 message("Moving assets")
-execute_process(COMMAND cp -r ${CMAKE_SOURCE_DIR}/src/assets ${CMAKE_BINARY_DIR}/lib/${PROJECT_NAME}/assets)
-configure_file(src/PythonConfig.h.in ${CMAKE_BINARY_DIR}/lib/${PROJECT_NAME}/assets/PythonConfig.h @ONLY)
+execute_process(COMMAND cp -r ${CMAKE_SOURCE_DIR}/src/assets ${CMAKE_BINARY_DIR}/home/${USER}/.${PROJECT_NAME})
+set(ASSET_DIR /home/${USER}/.${PROJECT_NAME}/assets)
+set(ASSET_DIR_DEB ${CMAKE_BINARY_DIR}/home/${USER}/.${PROJECT_NAME}/assets)
+configure_file(src/PythonConfig.h.in ${CMAKE_BINARY_DIR}/home/${USER}/.${PROJECT_NAME}/assets/PythonConfig.h @ONLY)
 
 
 # Building
 add_executable(${PROJECT_NAME} src/main.cpp src/QJsonModel.cpp src/QJsonModel.h src/TreeEditor.h src/TreeEditor.cpp src/MainWindow.cpp src/MainWindow.h src/MonoContainer.cpp src/MonoContainer.h)
 find_package(Qt${QT_VERSION} COMPONENTS ${REQUIRED_LIBS} REQUIRED)
 target_link_libraries(${PROJECT_NAME} ${REQUIRED_LIBS_QUALIFIED} stdc++fs ${MONO} ${LIBMONO} ${LIBMONOSGEN} ${LIBTBB})
-include_directories(${CMAKE_BINARY_DIR}/lib/${PROJECT_NAME}/assets)
+include_directories(${CMAKE_BINARY_DIR}/home/${USER}/.${PROJECT_NAME}/assets)
 
 add_custom_target(copy_asset_files ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/src/assets
-        ${CMAKE_BINARY_DIR}/lib/${PROJECT_NAME}/assets)
+        ${CMAKE_BINARY_DIR}/home/${USER}/.${PROJECT_NAME}/assets)
 install(TARGETS ${PROJECT_NAME}
         RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-install(DIRECTORY ${ASSETS} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/${PROJECT_NAME})
+install(DIRECTORY ${ASSETS} DESTINATION /home/${USER}/.${PROJECT_NAME})

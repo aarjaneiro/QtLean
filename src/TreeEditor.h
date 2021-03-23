@@ -32,7 +32,8 @@ class TreeEditor : public QWidget {
 Q_OBJECT
 
 public:
-    explicit TreeEditor(const QString &jsonName, QWidget *parent = nullptr);
+    explicit TreeEditor(std::basic_string<char, std::char_traits<char>, std::allocator<char>> jsonName,
+                        QWidget *parent = nullptr);
 
 private slots:
 
