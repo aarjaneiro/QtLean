@@ -12,6 +12,7 @@ endif ()
 
 # Set vars
 set(CMAKE_CXX_STANDARD 17)
+set(USER $ENV{USER})
 set(QT_FEATURE_glib:INTERNAL ON)
 set(QT_FEATURE_glibc:INTERNAL ON)
 set(CMAKE_AUTOMOC ON)
@@ -47,20 +48,22 @@ if (NOT CMAKE_PREFIX_PATH)
 endif ()
 # Config
 message("Moving assets")
-execute_process(COMMAND cp -r ${CMAKE_SOURCE_DIR}/src/assets ${CMAKE_BINARY_DIR}/lib/${PROJECT_NAME}/assets)
-configure_file(src/PythonConfig.h.in ${CMAKE_BINARY_DIR}/lib/${PROJECT_NAME}/assets/PythonConfig.h @ONLY)
+execute_process(COMMAND cp -r ${CMAKE_SOURCE_DIR}/src/assets ${CMAKE_BINARY_DIR}/home/${USER}/.${PROJECT_NAME})
+set(ASSET_DIR /home/${USER}/.${PROJECT_NAME}/assets)
+set(ASSET_DIR_DEB ${CMAKE_BINARY_DIR}/home/${USER}/.${PROJECT_NAME}/assets)
+configure_file(src/PythonConfig.h.in ${CMAKE_BINARY_DIR}/home/${USER}/.${PROJECT_NAME}/assets/PythonConfig.h @ONLY)
 
 
 # Building
 add_executable(${PROJECT_NAME} src/main.cpp src/QJsonModel.cpp src/QJsonModel.h src/TreeEditor.h src/TreeEditor.cpp src/MainWindow.cpp src/MainWindow.h src/MonoContainer.cpp src/MonoContainer.h)
 find_package(Qt${QT_VERSION} COMPONENTS ${REQUIRED_LIBS} REQUIRED)
 target_link_libraries(${PROJECT_NAME} ${REQUIRED_LIBS_QUALIFIED} stdc++fs ${MONO} ${LIBMONO} ${LIBMONOSGEN} ${LIBTBB})
-include_directories(${CMAKE_BINARY_DIR}/lib/${PROJECT_NAME}/assets)
+include_directories(${CMAKE_BINARY_DIR}/home/${USER}/.${PROJECT_NAME}/assets)
 
 add_custom_target(copy_asset_files ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/src/assets
-        ${CMAKE_BINARY_DIR}/lib/${PROJECT_NAME}/assets)
+        ${CMAKE_BINARY_DIR}/home/${USER}/.${PROJECT_NAME}/assets)
 install(TARGETS ${PROJECT_NAME}
         RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-install(DIRECTORY ${ASSETS} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/${PROJECT_NAME})
+install(DIRECTORY ${ASSETS} DESTINATION /home/${USER}/.${PROJECT_NAME})
