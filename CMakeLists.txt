@@ -23,8 +23,18 @@ set(REQUIRED_LIBS Core Gui Widgets)
 set(REQUIRED_LIBS_QUALIFIED Qt6::Core Qt6::Gui Qt6::Widgets)
 set(ASSETS src/assets)
 
-# Includes
+# Includes + Packaging
 include(FindPackageHandleStandardArgs)
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "QtLean -- a GUI interface to the Lean trading engine.")
+set(CPACK_PACKAGE_VENDOR "Aaron Janeiro Stone")
+set(CPACK_PACKAGE_CONTACT "ajstone@uwaterloo.ca")
+set(CPACK_PACKAGE_VERSION_MAJOR "0")
+set(CPACK_PACKAGE_VERSION_MINOR "7")
+set(CPACK_PACKAGE_VERSION_PATCH "1")
+set(CPACK_COMPONENT_LIBRARIES_DEPENDS "mono-native" "python3.6" "qt6")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-native" "python3.6" "qt6")
+include(CPack)
+
 
 # Find reqs
 find_library(Python3_LIBRARIES NAMES python3.6m libpython3.6m)
