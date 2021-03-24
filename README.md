@@ -1,4 +1,5 @@
 ![logo](src/assets/logo.png)
+![usage](images/usage.gif)
 
 ##### Table of Contents
 
